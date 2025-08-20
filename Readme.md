@@ -51,7 +51,7 @@ Para correr las pruebas automatizadas con REST Assured, asegúrate de que la API
 
 # Lección 5: Análisis de Resultados de Rendimiento
 
-A continuación, se presenta el análisis de las pruebas de carga ejecutadas con Apache JMeter (jmeter/PlanDeCarga_MediPlus.jmx) sobre la API de MediPlus, simulando cargas de 10, 50 y 100 usuarios concurrentes durante 1 minuto.
+A continuación, se presenta el análisis de las pruebas de carga ejecutadas con Apache JMeter ![Jmeter](jmeter/PlanDeCarga_MediPlus.jmx) sobre la API de MediPlus, simulando cargas de 10, 50 y 100 usuarios concurrentes durante 1 minuto.
 
 ### 1. Tabla Comparativa de Métricas
 
