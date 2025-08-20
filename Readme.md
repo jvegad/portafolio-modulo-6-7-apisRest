@@ -147,6 +147,7 @@ A continuación, se detalla el cumplimiento de los requisitos establecidos para 
 
 ---
 
-## Conclusiones Personales
+## Conclusiones 
 
 *En este proyecto, no solo aprendimos la sintaxis de REST Assured y el uso de JMeter, sino también la importancia crítica de la depuración y de cómo un entorno puede afectar las pruebas. El proceso de encontrar y solucionar los fallos fue un gran aprendizaje. Además, el análisis de los resultados de JMeter nos permitió entender cómo identificar cuellos de botella en una aplicación real*
+
