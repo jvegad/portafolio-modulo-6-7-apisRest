@@ -1,9 +1,12 @@
 package com.mediplus.api.service;
 
-import com.mediplus.api.model.Paciente;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import com.mediplus.api.model.Paciente;
 
 @Service
 public class PacienteService {
@@ -20,7 +23,9 @@ public class PacienteService {
     }
 
     public Paciente create(Paciente paciente) {
-        if (paciente.getNombre() == null || paciente.getApellido() == null || paciente.getEdad() == null) {
+        if (paciente.getNombre() == null || paciente.getNombre().isBlank()
+                || paciente.getApellido() == null || paciente.getApellido().isBlank()
+                || paciente.getEdad() == null || paciente.getEdad() < 0) {
             return null; // se manejará como 400 en el controlador
         }
         paciente.setId(idCounter++);
@@ -30,10 +35,18 @@ public class PacienteService {
 
     public Paciente update(Long id, Paciente paciente) {
         Paciente existente = pacientes.get(id);
-        if (existente == null) return null;
-        if (paciente.getNombre() != null) existente.setNombre(paciente.getNombre());
-        if (paciente.getApellido() != null) existente.setApellido(paciente.getApellido());
-        if (paciente.getEdad() != null) existente.setEdad(paciente.getEdad());
+        if (existente == null) {
+            return null;
+        }
+        if (paciente.getNombre() != null) {
+            existente.setNombre(paciente.getNombre());
+        }
+        if (paciente.getApellido() != null) {
+            existente.setApellido(paciente.getApellido());
+        }
+        if (paciente.getEdad() != null) {
+            existente.setEdad(paciente.getEdad());
+        }
         return existente;
     }
 

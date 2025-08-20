@@ -1,0 +1,4 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+HTTP Request GET /pacientes,99812,25,0,271,21.33,0.000%,1660.15768,282.10,202.66,174.0
+HTTP Request POST /medicos,99766,26,0,580,21.98,0.000%,1658.17904,429.48,454.68,265.2
+TOTAL,199578,26,0,580,21.66,0.000%,3316.79186,711.30,657.13,219.6

@@ -1,108 +1,116 @@
 package com.mediplus.api;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
+import io.restassured.RestAssured;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import io.restassured.http.ContentType;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MedicoApiTest {
 
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "http://localhost/medicos/1";
+        RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
         RestAssured.basePath = "/medicos";
     }
 
     @Test
-    public void testGetMedicos() {
+    @Order(1)
+    public void testGetMedicosInitiallyEmpty() {
         given()
-        .when()
-            .get()
-        .then()
-            .statusCode(404)
-            .body("size()", greaterThanOrEqualTo(0));
-    }
-
-   @Test
-public void testCrearMedico() {
-    String json = """
-        {
-            "nombre": "Ana",
-            "apellido": "Gómez",
-            "especialidad": "Cardiología"
-        }
-    """;
-
-    given()
-        .baseUri("http://localhost:8080") // Cambia esto si tu servidor usa otro puerto
-        .basePath("/medicos")             // Asegúrate de que este sea el endpoint correcto
-        .contentType(ContentType.JSON)
-        .body(json)
-    .when()
-        .post()
-    .then()
-        .statusCode(201) // <- Esperamos que se cree correctamente
-        .body("nombre", equalTo("Ana"))
-        .body("apellido", equalTo("Gómez"));
-}
-
-
-   @Test
-public void testActualizarMedico() {
-    String json = """
-        {
-            "nombre": "Ana",
-            "apellido": "Gómez",
-            "especialidad": "Neurología"
-        }
-    """;
-
-    given()
-        .contentType(ContentType.JSON)
-        .body(json)
-    .when()
-        .put("/1")
-    .then()
-        .statusCode(404); // No verificar el body, porque no hay contenido
-}
-
-    @Test
-    public void testEliminarMedico() {
-        when()
-            .delete("/1")
-        .then()
-            .statusCode(404);
-    }
-
-    // Pruebas negativas
-    @Test
-    public void testGetMedicoNoExistente() {
-        when()
-            .get("/9999")
-        .then()
-            .statusCode(404);
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(0));
     }
 
     @Test
-    public void testCrearMedicoInvalido() {
+    @Order(2)
+    public void testCrearMedico() {
         String json = """
             {
-                "nombre": "",
-                "apellido": "",
-                "especialidad": ""
+                "nombre": "Ana",
+                "apellido": "Gómez",
+                "especialidad": "Cardiología"
             }
         """;
 
         given()
-            .contentType(ContentType.JSON)
-            .body(json)
-        .when()
-            .post()
-        .then()
-            .statusCode(404);
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .post()
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .body("nombre", equalTo("Ana"))
+                .body("apellido", equalTo("Gómez"));
+    }
+
+    @Test
+    @Order(3)
+    public void testActualizarMedico() {
+        String json = """
+            {
+                "especialidad": "Neurología"
+            }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .put("/1")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(1))
+                .body("especialidad", equalTo("Neurología"));
+    }
+
+    @Test
+    @Order(5)
+    public void testGetMedicoNoExistente() {
+        when()
+                .get("/999")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(6)
+    public void testCrearMedicoInvalido() {
+        String json = """
+            {
+                "nombre": "",
+                "especialidad": "Cirugía"
+            }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .post()
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    @Order(4)
+    public void testEliminarMedico() {
+        when()
+                .delete("/1")
+                .then()
+                .statusCode(204);
     }
 }
