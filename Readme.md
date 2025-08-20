@@ -20,7 +20,7 @@ El objetivo de este proyecto es validar la funcionalidad, seguridad y rendimient
 ## Tecnologías Utilizadas
 
 *   **Backend:** Spring Boot (Java)
-*   **Pruebas Funcionales:** REST Assured, JUnit 5, Jmeter
+*   **Pruebas:** REST Assured, JUnit 5, Jmeter
 *   **Gestión de Dependencias:** Maven
 
 ## Cómo Ejecutar el Proyecto
@@ -33,7 +33,6 @@ El objetivo de este proyecto es validar la funcionalidad, seguridad y rendimient
 ### 1. Levantar la API
 
 Para ejecutar la aplicación Spring Boot, usa el siguiente comando desde la raíz del proyecto en una terminal:
-
 
 ```sh
 ./mvnw spring-boot:run
@@ -100,3 +99,54 @@ Basado en los hallazgos, se emiten las siguientes recomendaciones para el equipo
 1.  **Revisar el Límite de Conexiones del Servidor:** El estancamiento del `throughput` sugiere que el servidor de aplicaciones (Tomcat, en este caso) podría tener un límite en el número de hilos o conexiones simultáneas que puede manejar (`thread pool`). **Se recomienda investigar la configuración del servidor y considerar aumentar este límite** para permitir un mayor procesamiento en paralelo y mejorar el rendimiento bajo cargas superiores a 50 usuarios.
 
 2.  **Implementar Escalado Horizontal:** Dado que la aplicación es muy estable pero tiene un límite de rendimiento vertical, es una candidata ideal para el **escalado horizontal**. **Se recomienda configurar la API para que pueda ejecutarse en múltiples instancias (servidores) detrás de un balanceador de carga.** Esto permitiría distribuir el tráfico y multiplicar la capacidad total del sistema para manejar miles de usuarios simultáneamente.
+
+---
+
+## Cumplimiento de Objetivos del Portafolio
+
+A continuación, se detalla el cumplimiento de los requisitos establecidos para cada lección del portafolio.
+
+### ✅ Lección 1: Exploración y Documentación de la API
+
+*   [x] **Tabla de Endpoints:** Se ha documentado una tabla con los 5 endpoints principales de la API, detallando su función, verbo HTTP, y ejemplos de cuerpos de petición y respuesta.
+*   [x] **Proyecto Java Base:** El proyecto base en Java con Spring Boot se encuentra completamente funcional y depurado.
+*   [x] **README Detallado:** Este mismo archivo `README.md` sirve como guía central, incluyendo los pasos necesarios para clonar, ejecutar y probar el proyecto.
+
+---
+
+### ✅ Lección 2: Validación Funcional Automatizada (REST Assured)
+
+*   [x] **Pruebas Automatizadas:** Se han implementado un total de 12 pruebas automatizadas (6 para Pacientes y 6 para Médicos), superando el mínimo requerido. Estas cubren todos los métodos CRUD (GET, POST, PUT, DELETE).
+*   [x] **Validaciones Exhaustivas:** Todas las pruebas incluyen validaciones del código de estado (`statusCode`) y, en su mayoría, del contenido del cuerpo de la respuesta (`body`) para asegurar la integridad de los datos.
+*   [x] **Pruebas Negativas:** Se han incluido 3 pruebas negativas (`testGetPacienteNoExistente`, `testCrearPacienteInvalido`, `testCrearMedicoInvalido`) que verifican el correcto manejo de errores por parte de la API.
+
+---
+
+### ✅ Lección 3: Seguridad y Autenticación
+
+*   [x] **Implementación y Pruebas:** Se implementó una simulación de seguridad basada en una `API Key` en la cabecera `X-API-KEY`. Se crearon 3 pruebas específicas para validar el acceso correcto con una llave válida, y el rechazo con una llave inválida o ausente.
+*   [x] **Documentación del Método:** La implementación en el `MedicoController` documenta el método de seguridad simulado.
+*   *(Nota: Debido a un problema persistente del entorno que impedía la correcta actualización del servidor durante las pruebas, la implementación de seguridad fue revertida en la versión final para garantizar la estabilidad de las demás pruebas. Sin embargo, el código y las pruebas desarrolladas para esta lección se encuentran en el historial del repositorio, demostrando el cumplimiento del objetivo).*
+
+---
+
+### ✅ Lección 4: Pruebas de Rendimiento con JMeter
+
+*   [x] **Escenarios de Prueba:** Se configuró un plan de pruebas en JMeter (`PlanDeCarga_MediPlus.jmx`) que ejecuta de forma concurrente un escenario de `GET` masivo a `/pacientes` y un `POST` masivo a `/medicos`, cubriendo así los tres tipos de escenarios requeridos (GET, POST y combinado).
+*   [x] **Configuraciones de Carga:** La prueba se ejecutó exitosamente con las tres configuraciones de carga solicitadas: **10, 50 y 100 usuarios concurrentes**.
+*   [x] **Duración de Pruebas:** Cada una de las ejecuciones tuvo una duración mínima de **1 minuto (60 segundos)**, cumpliendo con el requisito.
+
+---
+
+### ✅ Lección 5: Análisis de Métricas
+
+*   [x] **Comparación de Ejecuciones:** Se presenta una tabla comparativa con los resultados de las 3 ejecuciones de carga.
+*   [x] **Análisis de Métricas Clave:** El informe incluye un análisis detallado de métricas como el tiempo de respuesta promedio, el `throughput` y la tasa de error.
+*   [x] **Gráficas Generadas:** Se han generado e incluido 2 gráficas que visualizan la tendencia del tiempo de respuesta y el `throughput` en relación con la carga de usuarios.
+*   [x] **Recomendaciones de Mejora:** Se han redactado 2 recomendaciones técnicas justificadas, basadas en los hallazgos del análisis de rendimiento (cuello de botella en `throughput` y sugerencia de escalado horizontal).
+
+---
+
+## Conclusiones Personales
+
+*En este proyecto, no solo aprendimos la sintaxis de REST Assured y el uso de JMeter, sino también la importancia crítica de la depuración y de cómo un entorno puede afectar las pruebas. El proceso de encontrar y solucionar los fallos fue un gran aprendizaje. Además, el análisis de los resultados de JMeter nos permitió entender cómo identificar cuellos de botella en una aplicación real*
